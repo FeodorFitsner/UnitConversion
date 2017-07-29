@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.1</VersionPrefix>
+    <Version>0.1</Version>
     <TargetFramework>netcoreapp1.0</TargetFramework>
     <AssemblyName>UnitConversionTests</AssemblyName>
     <PackageId>UnitConversionTests</PackageId>
