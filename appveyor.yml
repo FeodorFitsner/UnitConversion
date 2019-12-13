@@ -1,31 +1,19 @@
-version: '{build}'
-
-clone_depth: 50
-
-cache:
-  - '%LOCALAPPDATA%\Microsoft\dotnet -> appveyor.yml'
-  - '%USERPROFILE%\.nuget\packages -> appveyor.yml, **\project.json, Nuget.Config'
-
+version: 1.0.{build}
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  version_prefix: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
 before_build:
-  # Install dotnet cli
-  - appveyor DownloadFile https://raw.githubusercontent.com/dotnet/cli/v1.0.4/scripts/obtain/dotnet-install.ps1
-  - powershell -File dotnet-install.ps1
-  - set PATH=%PATH%;%LOCALAPPDATA%\Microsoft\dotnet
-  - dotnet --version
-
-  # Restore packages
-  - dotnet restore .\UnitConversion\UnitConversion.csproj
-  - dotnet restore .\UnitConversionTests\UnitConversionTests.csproj
-
-build_script:
-  - dotnet build .\UnitConversion\UnitConversion.csproj
-  - dotnet build .\UnitConversionTests\UnitConversionTests.csproj
-
+- cmd: dotnet restore
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  include_nuget_references: true
+  verbosity: minimal
 test_script:
-  - dotnet test .\UnitConversionTests\UnitConversionTests.csproj
-
-after_test:
-  - dotnet pack .\UnitConversion\UnitConversion.csproj --configuration=Release --output=".\Nuget"
-
-artifacts:
-  - path: .\UnitConversion\Nuget\*.nupkg
+- cmd: dotnet test .\UnitConversionTests\UnitConversionTests.csproj
